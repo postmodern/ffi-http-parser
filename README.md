@@ -43,6 +43,7 @@ Ruby FFI bindings to the [http-parser][1] library.
 
 ## Requirements
 
+* [http-parser](https://github.com/joyent/http-parser#readme) 1.0
 * [ffi](https://github.com/ffi/ffi#readme) ~> 1.0
 
 ## Install
