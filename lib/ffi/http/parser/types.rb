@@ -2,7 +2,7 @@ require 'ffi'
 
 module FFI
   module HTTP
-    module Parser
+    class Parser
       extend FFI::Library
 
       HTTP_MAX_HEADER_SIZE = (80 * 1024)
@@ -11,33 +11,33 @@ module FFI
       callback :http_cb, [:pointer], :int
 
       enum :http_method, [
-        :delete,
-        :get,
-        :head,
-        :post,
-        :put,
+        :DELETE,
+        :GET,
+        :HEAD,
+        :POST,
+        :PUT,
         # pathological
-        :connect,
-        :options,
-        :trace,
+        :CONNECT,
+        :OPTIONS,
+        :TRACE,
         # webdav
-        :copy,
-        :lock,
-        :mkcol,
-        :move,
-        :propfind,
-        :proppatch,
-        :unlock,
+        :COPY,
+        :LOCK,
+        :MKCOL,
+        :MOVE,
+        :PROPFIND,
+        :PROPPATCH,
+        :UNLOCK,
         # subversion
-        :report,
-        :mkactivity,
-        :checkout,
-        :merge,
+        :REPORT,
+        :MKACTIVITY,
+        :CHECKOUT,
+        :MERGE,
         # upnp
-        :msearch,
-        :notify,
-        :subscribe,
-        :unsubscribe
+        :MSEARCH,
+        :NOTIFY,
+        :SUBSCRIBE,
+        :UNSUBSCRIBE
       ]
 
       enum :http_parser_type, [:request, :response, :both]

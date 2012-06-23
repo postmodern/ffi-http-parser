@@ -1,6 +1,6 @@
 module FFI
   module HTTP
-    module Parser
+    class Parser
       # ffi-http-parser version
       VERSION = "0.1.0"
     end

@@ -2,7 +2,7 @@ require 'ffi/http/parser/types'
 
 module FFI
   module HTTP
-    module Parser
+    class Parser
       class State < FFI::Struct
         
         layout :type_flags,   :uchar,
@@ -55,6 +55,10 @@ module FFI
 
         def data
           self[:data]
+        end
+
+        def keep_alive?
+          Parser.http_should_keep_alive(self) > 0
         end
 
       end
