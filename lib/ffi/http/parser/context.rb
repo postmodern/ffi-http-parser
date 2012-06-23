@@ -9,28 +9,28 @@ module FFI
       class Context < FFI::Struct
 
         layout :type_flags,   :uchar,
-          :state,        :uchar,
-          :header_state, :uchar,
-          :index,        :uchar,
+               :state,        :uchar,
+               :header_state, :uchar,
+               :index,        :uchar,
 
-          :nread,          :uint32,
-          :content_length, :int64,
+               :nread,          :uint32,
+               :content_length, :int64,
 
-          # READ-ONLY
-          :http_major,  :ushort,
-          :http_minor,  :ushort,
-          :status_code, :ushort, # responses only
-          :method,      :uchar,  # requests only
+               # READ-ONLY
+               :http_major,  :ushort,
+               :http_minor,  :ushort,
+               :status_code, :ushort, # responses only
+               :method,      :uchar,  # requests only
 
-          # 1 = Upgrade header was present and the parser has exited because of that.
-          # 0 = No upgrade header present.
-          #
-          # Should be checked when http_parser_execute() returns in addition to
-          # error checking.
-          :upgrade,     :char,
+               # 1 = Upgrade header was present and the parser has exited because of that.
+               # 0 = No upgrade header present.
+               #
+               # Should be checked when http_parser_execute() returns in addition to
+               # error checking.
+               :upgrade,     :char,
 
-          # PUBLIC
-          :data, :pointer
+               # PUBLIC
+               :data, :pointer
 
         # The parser type (`:request`, `:response` or `:both`)
         attr_accessor :type
