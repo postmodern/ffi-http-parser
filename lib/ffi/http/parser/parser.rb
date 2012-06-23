@@ -1,5 +1,5 @@
 require 'ffi/http/parser/types'
-require 'ffi/http/parser/context'
+require 'ffi/http/parser/instance'
 
 module FFI
   module HTTP
@@ -14,8 +14,14 @@ module FFI
       attach_function :http_should_keep_alive, [:pointer], :int
       attach_function :http_method_str, [:http_method], :string
 
+      #
+      # Creates a new Parser.
+      #
+      # @return [Instance]
+      #   A new parser instance.
+      #
       def self.new(&block)
-        Context.new(&block)
+        Instance.new(&block)
       end
 
     end

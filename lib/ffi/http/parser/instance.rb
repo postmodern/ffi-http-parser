@@ -6,7 +6,7 @@ require 'ffi'
 module FFI
   module HTTP
     module Parser
-      class Context < FFI::Struct
+      class Instance < FFI::Struct
 
         layout :type_flags,   :uchar,
                :state,        :uchar,
