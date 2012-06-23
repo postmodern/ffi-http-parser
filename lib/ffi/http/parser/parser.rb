@@ -32,37 +32,37 @@ module FFI
       end
 
       def on_path(&block)
-        @settings[:on_path] = wrap_callback(&block)
+        @settings[:on_path] = wrap_data_callback(&block)
       end
 
       def on_query_string(&block)
-        @settings[:on_query_string] = wrap_callback(&block)
+        @settings[:on_query_string] = wrap_data_callback(&block)
       end
 
       def on_url(&block)
-        @settings[:on_url] = wrap_callback(&block)
+        @settings[:on_url] = wrap_data_callback(&block)
       end
 
       def on_fragment(&block)
-        @settings[:on_fragment] = wrap_callback(&block)
+        @settings[:on_fragment] = wrap_data_callback(&block)
       end
 
       def on_header_field(&block)
-        @settings[:on_header_field] = wrap_callback(&block)
+        @settings[:on_header_field] = wrap_data_callback(&block)
       end
 
       def on_header_value(&block)
-        @settings[:on_header_value] = wrap_callback(&block)
+        @settings[:on_header_value] = wrap_data_callback(&block)
       end
 
       def on_headers_complete(&block)
-        @settings[:on_headers_complete] = proc { |parser|
-          (block.call(parser) == :stop) ? 1 : 0
+        @settings[:on_headers_complete] = proc { |state|
+          (block.call(@state) == :stop) ? 1 : 0
         }
       end
 
       def on_body(&block)
-        @settings[:on_body] = wrap_callback(&block)
+        @settings[:on_body] = wrap_data_callback(&block)
       end
 
       def on_message_complete(&block)
@@ -80,7 +80,15 @@ module FFI
       protected
 
       def wrap_callback(&block)
-        proc { |*args| (block.call(*args) == :error) ? -1 : 0 }
+        proc { |state| (block.call(@state) == :error) ? -1 : 0 }
+      end
+
+      def wrap_data_callback(&block)
+        proc { |state,buffer,length|
+          data = buffer.get_bytes(0,length)
+
+          (block.call(@state,data) == :error) ? -1 : 0
+        }
       end
 
     end

@@ -24,20 +24,20 @@ Ruby FFI bindings to the [http-parser][1] library.
         puts "message end"
       end
 
-      parser.on_url do |state,buffer,length|
-        puts "url: #{buffer.get_bytes(0,length)}"
+      parser.on_url do |state,data|
+        puts "url: #{data}"
       end
 
-      parser.on_header_field do |state,buffer,length|
-        puts "field: #{buffer.get_bytes(0,length)}"
+      parser.on_header_field do |state,data|
+        puts "field: #{data}"
       end
 
-      parser.on_header_value do |state,buffer,length|
-        puts "value: #{buffer.get_bytes(0,length)}"
+      parser.on_header_value do |state,data|
+        puts "value: #{data}"
       end
 
-      parser.on_body do |state,buffer,length|
-        puts "body: #{buffer.get_bytes(0,length)}"
+      parser.on_body do |state,data|
+        puts "body: #{data}"
       end
     end
 
