@@ -2,7 +2,7 @@ require 'ffi'
 
 module FFI
   module HTTP
-    class Parser
+    module Parser
       extend FFI::Library
 
       HTTP_MAX_HEADER_SIZE = (80 * 1024)

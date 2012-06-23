@@ -2,7 +2,7 @@ require 'ffi/http/parser/types'
 
 module FFI
   module HTTP
-    class Parser
+    module Parser
       class Settings < FFI::Struct
 
         layout :on_message_begin,    :http_cb,

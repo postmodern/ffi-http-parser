@@ -16,32 +16,34 @@ Ruby FFI bindings to the [http-parser][1] library.
     require 'ffi/http/parser'
 
     parser = FFI::HTTP::Parser.new do |parser|
-      parser.on_message_begin do |state|
+      parser.on_message_begin do
         puts "message begin"
       end
 
-      parser.on_message_complete do |state|
+      parser.on_message_complete do
         puts "message end"
       end
 
-      parser.on_url do |state,data|
+      parser.on_url do |data|
         puts "url: #{data}"
       end
 
-      parser.on_header_field do |state,data|
+      parser.on_header_field do |data|
         puts "field: #{data}"
       end
 
-      parser.on_header_value do |state,data|
+      parser.on_header_value do |data|
         puts "value: #{data}"
       end
 
-      parser.on_body do |state,data|
+      parser.on_body do |data|
         puts "body: #{data}"
       end
     end
 
 ## Requirements
+
+* [ffi](https://github.com/ffi/ffi#readme) ~> 1.0
 
 ## Install
 
