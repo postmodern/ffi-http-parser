@@ -1,0 +1,12 @@
+name: ffi-http-parser
+summary: FFI bindings for http-parser
+description: Ruby FFI bindings to the http-parser library.
+license: MIT
+authors: Postmodern
+email: postmodern.mod3@gmail.com
+homepage: https://github.com/postmodern/ffi-http-parser#readme
+
+development_dependencies:
+  rubygems-tasks: ~> 0.2
+  rspec: ~> 2.4
+  yard: ~> 0.7
