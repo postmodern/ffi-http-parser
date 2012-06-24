@@ -120,7 +120,7 @@ module FFI
         end
 
         def http_method
-          self[:method]
+          METHODS[self[:method]]
         end
 
         def upgrade?
