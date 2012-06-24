@@ -10,7 +10,7 @@ module FFI
       callback :http_data_cb, [:pointer, :pointer, :size_t], :int
       callback :http_cb, [:pointer], :int
 
-      enum :http_method, [
+      METHODS = enum :http_method, [
         :DELETE,
         :GET,
         :HEAD,
@@ -40,7 +40,7 @@ module FFI
         :UNSUBSCRIBE
       ]
 
-      enum :http_parser_type, [:request, :response, :both]
+      TYPES = enum :http_parser_type, [:request, :response, :both]
 
     end
   end

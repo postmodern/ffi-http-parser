@@ -38,14 +38,11 @@ module FFI
         def initialize(ptr=nil)
           super(ptr)
 
-          @type     = :both
           @settings = Settings.new
 
-          unless ptr
-            Parser.http_parser_init(self,@type)
-          end
-
           yield self if block_given?
+
+          Parser.http_parser_init(self,type) unless ptr
         end
 
         def on_message_begin(&block)
@@ -91,11 +88,19 @@ module FFI
         end
 
         def reset!
-          Parser.http_parser_init(self,@type)
+          Parser.http_parser_init(self,type)
         end
 
         def <<(data)
           Parser.http_parser_execute(self,@settings,data,data.length)
+        end
+
+        def type
+          TYPES[self[:type] & 0x3]
+        end
+
+        def type=(new_type)
+          self[:type] = TYPES[new_type]
         end
 
         def http_major
