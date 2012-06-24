@@ -60,7 +60,7 @@ module FFI
         #   The given block will be called when the HTTP message begins.
         #
         def on_message_begin(&block)
-          @settings[:on_message_begin] = wrap_callback(&block)
+          @settings[:on_message_begin] = wrap_callback(block)
         end
 
         #
@@ -76,7 +76,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_path(&block)
-          @settings[:on_path] = wrap_data_callback(&block)
+          @settings[:on_path] = wrap_data_callback(block)
         end
 
         #
@@ -92,7 +92,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_query_string(&block)
-          @settings[:on_query_string] = wrap_data_callback(&block)
+          @settings[:on_query_string] = wrap_data_callback(block)
         end
 
         #
@@ -108,7 +108,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_fragment(&block)
-          @settings[:on_fragment] = wrap_data_callback(&block)
+          @settings[:on_fragment] = wrap_data_callback(block)
         end
 
         #
@@ -124,7 +124,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_url(&block)
-          @settings[:on_url] = wrap_data_callback(&block)
+          @settings[:on_url] = wrap_data_callback(block)
         end
 
         #
@@ -140,7 +140,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_header_field(&block)
-          @settings[:on_header_field] = wrap_data_callback(&block)
+          @settings[:on_header_field] = wrap_data_callback(block)
         end
 
         #
@@ -156,7 +156,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_header_value(&block)
-          @settings[:on_header_value] = wrap_data_callback(&block)
+          @settings[:on_header_value] = wrap_data_callback(block)
         end
 
         #
@@ -189,7 +189,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_body(&block)
-          @settings[:on_body] = wrap_data_callback(&block)
+          @settings[:on_body] = wrap_data_callback(block)
         end
 
         #
@@ -199,7 +199,7 @@ module FFI
         #   The given block will be called when the message completes.
         #
         def on_message_complete(&block)
-          @settings[:on_message_complete] = wrap_callback(&block)
+          @settings[:on_message_complete] = wrap_callback(block)
         end
 
         #
@@ -223,11 +223,11 @@ module FFI
         #   The data to parse.
         #
         # @return [Instance]
-        #   The Instance parser. `nil` will be returned if the parser
-        #   encountered an error.
+        #   The Instance parser.
         #
         def <<(data)
-          self if parse(data) > 0
+          parse(data)
+          return self
         end
 
         #
