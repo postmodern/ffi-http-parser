@@ -93,13 +93,19 @@ module FFI
           @settings[:on_message_complete] = wrap_callback(&block)
         end
 
+        def parse(data)
+          Parser.http_parser_execute(self,@settings,data,data.length)
+        end
+
+        def <<(data)
+          self if parse(data) > 0
+        end
+
         def reset!
           Parser.http_parser_init(self,type)
         end
 
-        def <<(data)
-          Parser.http_parser_execute(self,@settings,data,data.length)
-        end
+        alias reset reset!
 
         def type
           TYPES[self[:type_flags] & 0x3]
