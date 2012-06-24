@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'callback_examples'
+
 require 'ffi/http/parser/instance'
 
 describe Instance do
@@ -77,6 +79,8 @@ describe Instance do
 
   describe "callbacks" do
     describe "on_message_begin" do
+      include_examples "callback", :on_message_begin
+
       subject do
         described_class.new do |parser|
           parser.on_message_begin { @begun = true }
@@ -91,6 +95,8 @@ describe Instance do
     end
 
     describe "on_path" do
+      include_examples "callback", :on_path
+
       let(:expected) { '/foo' }
 
       subject do
@@ -111,6 +117,8 @@ describe Instance do
     end
 
     describe "on_query_string" do
+      include_examples "callback", :on_query_string
+
       let(:expected) { 'x=1&y=2' }
 
       subject do
@@ -131,6 +139,8 @@ describe Instance do
     end
 
     describe "on_url" do
+      include_examples "callback", :on_url
+
       let(:expected) { '/foo?q=1' }
 
       subject do
@@ -151,6 +161,8 @@ describe Instance do
     end
 
     describe "on_fragment" do
+      include_examples "callback", :on_fragment
+
       let(:expected) { 'bar' }
 
       subject do
@@ -159,7 +171,7 @@ describe Instance do
         end
       end
 
-      it "should pass the recognized url" do
+      it "should pass the recognized fragment" do
         subject << "GET /foo"
 
         @fragment.should be_nil
@@ -171,6 +183,8 @@ describe Instance do
     end
 
     describe "on_header_field" do
+      include_examples "callback", :on_header_field
+
       let(:expected) { 'Host' }
 
       subject do
@@ -179,7 +193,7 @@ describe Instance do
         end
       end
 
-      it "should pass the recognized url" do
+      it "should pass the recognized header-name" do
         subject << "GET /foo HTTP/1.1\r\n"
 
         @header_field.should be_nil
@@ -191,6 +205,8 @@ describe Instance do
     end
 
     describe "on_header_value" do
+      include_examples "callback", :on_header_value
+
       let(:expected) { 'example.com' }
 
       subject do
@@ -199,7 +215,7 @@ describe Instance do
         end
       end
 
-      it "should pass the recognized url" do
+      it "should pass the recognized header-value" do
         subject << "GET /foo HTTP/1.1\r\n"
 
         @header_value.should be_nil
@@ -211,6 +227,8 @@ describe Instance do
     end
 
     describe "on_headers_complete" do
+      include_examples "callback", :on_headers_complete
+
       subject do
         described_class.new do |parser|
           parser.on_headers_complete { @header_complete = true }
@@ -283,6 +301,16 @@ describe Instance do
       parser.reset!
 
       parser.type.should == :both
+    end
+  end
+
+  describe "#http_method" do
+    let(:expected) { :POST }
+
+    it "should set the http_method field" do
+      subject << "#{expected} / HTTP/1.1\r\n"
+
+      subject.http_method.should == expected
     end
   end
 
