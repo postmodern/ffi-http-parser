@@ -11,7 +11,7 @@ Ruby FFI bindings to the [http-parser][1] library.
 
 ## Features
 
-* Provides the same API as [http-parser-lite][2]
+* Provides the same API as [http-parser-lite][2].
 * Supports:
   * Ruby 1.8.7
   * Ruby >= 1.9.1
