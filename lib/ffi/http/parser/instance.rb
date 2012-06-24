@@ -36,7 +36,9 @@ module FFI
         attr_accessor :type
 
         def initialize(ptr=nil)
-          super(ptr)
+          if ptr then super(ptr)
+          else        super()
+          end
 
           @settings = Settings.new
 
