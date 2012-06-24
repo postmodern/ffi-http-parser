@@ -96,11 +96,15 @@ module FFI
         end
 
         def type
-          TYPES[self[:type] & 0x3]
+          TYPES[self[:type_flags] & 0x3]
         end
 
         def type=(new_type)
-          self[:type] = TYPES[new_type]
+          self[:type_flags] = ((flags << 2) | TYPES[new_type])
+        end
+
+        def flags
+          (self[:type_flags] & 0xfc) >> 2
         end
 
         def http_major
