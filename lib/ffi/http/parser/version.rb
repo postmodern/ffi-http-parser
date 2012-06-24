@@ -1,5 +1,3 @@
-require 'ffi'
-
 module FFI
   module HTTP
     module Parser
