@@ -75,7 +75,11 @@ module FFI
 
         def on_headers_complete(&block)
           @settings[:on_headers_complete] = proc { |parser|
-            (block.call() == :stop) ? 1 : 0
+            case block.call()
+            when :error then -1
+            when :stop  then  1
+            else              0
+            end
           }
         end
 
