@@ -79,7 +79,7 @@ describe Instance do
 
   describe "callbacks" do
     describe "on_message_begin" do
-      include_examples "callback", :on_message_begin
+      include_examples "callback", {:on_message_begin => :on_path}
 
       subject do
         described_class.new do |parser|
@@ -95,7 +95,7 @@ describe Instance do
     end
 
     describe "on_path" do
-      include_examples "callback", :on_path
+      include_examples "callback", {:on_path => :on_query_string}
 
       let(:expected) { '/foo' }
 
@@ -117,7 +117,7 @@ describe Instance do
     end
 
     describe "on_query_string" do
-      include_examples "callback", :on_query_string
+      include_examples "callback", {:on_query_string => :on_fragment}
 
       let(:expected) { 'x=1&y=2' }
 
@@ -138,30 +138,8 @@ describe Instance do
       end
     end
 
-    describe "on_url" do
-      include_examples "callback", :on_url
-
-      let(:expected) { '/foo?q=1' }
-
-      subject do
-        described_class.new do |parser|
-          parser.on_url { |data| @url = data }
-        end
-      end
-
-      it "should pass the recognized url" do
-        subject << "GET "
-
-        @url.should be_nil
-
-        subject << "#{expected} HTTP/1.1"
-
-        @url.should == expected
-      end
-    end
-
     describe "on_fragment" do
-      include_examples "callback", :on_fragment
+      include_examples "callback", {:on_fragment => :on_header_field}
 
       let(:expected) { 'bar' }
 
@@ -182,8 +160,30 @@ describe Instance do
       end
     end
 
+    describe "on_url" do
+      include_examples "callback", {:on_url => :on_header_field}
+
+      let(:expected) { '/foo?q=1' }
+
+      subject do
+        described_class.new do |parser|
+          parser.on_url { |data| @url = data }
+        end
+      end
+
+      it "should pass the recognized url" do
+        subject << "GET "
+
+        @url.should be_nil
+
+        subject << "#{expected} HTTP/1.1"
+
+        @url.should == expected
+      end
+    end
+
     describe "on_header_field" do
-      include_examples "callback", :on_header_field
+      include_examples "callback", {:on_header_field => :on_header_value}
 
       let(:expected) { 'Host' }
 
@@ -205,7 +205,7 @@ describe Instance do
     end
 
     describe "on_header_value" do
-      include_examples "callback", :on_header_value
+      include_examples "callback", {:on_header_value => :on_body}
 
       let(:expected) { 'example.com' }
 
@@ -227,7 +227,7 @@ describe Instance do
     end
 
     describe "on_headers_complete" do
-      include_examples "callback", :on_headers_complete
+      include_examples "callback", {:on_headers_complete => :on_body}
 
       subject do
         described_class.new do |parser|
@@ -257,11 +257,37 @@ describe Instance do
 
         it "should indicate there is no request body to parse" do
           subject << "GET / HTTP/1.1\r\n"
-          subject << "Host: example.com\r\n\r\n"
-          subject << "Body\r\n"
+          subject << "Host: example.com\r\n"
+          subject << "\r\n"
+          subject << "Body"
 
           @body.should be_nil
         end
+      end
+    end
+
+    describe "on_body" do
+      include_examples "callback", {:on_body => :on_message_complete}
+
+      let(:expected) { "Body" }
+
+      subject do
+        described_class.new do |parser|
+          parser.on_body { |data| @body = data }
+        end
+      end
+
+      it "should trigger on the body" do
+        subject << "POST / HTTP/1.1\r\n"
+        subject << "Transfer-Encoding: chunked\r\n"
+        subject << "\r\n"
+
+        @body.should be_nil
+
+        subject << "#{"%x" % expected.length}\r\n"
+        subject << expected
+
+        @body.should == expected
       end
     end
 
