@@ -11,6 +11,12 @@ Ruby FFI bindings to the [http-parser][1] library.
 
 ## Features
 
+* Provides the same API as [http-parser-lite][2]
+* Supports:
+  * Ruby 1.8.7
+  * Ruby >= 1.9.1
+  * JRuby >= 1.6.7
+
 ## Examples
 
     require 'ffi/http/parser'
@@ -56,4 +62,5 @@ Copyright (c) 2012 Hal Brodigan
 
 See {file:LICENSE.txt} for details.
 
-[1]: https://github.com/joyent/http-parser
+[1]: https://github.com/joyent/http-parser#readme
+[2]: https://github.com/deepfryed/http-parser-lite#readme
