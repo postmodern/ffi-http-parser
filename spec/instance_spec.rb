@@ -58,6 +58,15 @@ describe Instance do
 
       subject.type.should == :both
     end
+
+    it "should not change flags" do
+      flags = (0xff & ~0x3)
+      subject[:type_flags] = flags
+
+      subject.type = :both
+
+      subject[:type_flags].should == (flags | TYPES[:both])
+    end
   end
 
   describe "#<<" do

@@ -256,7 +256,7 @@ module FFI
         #   The new parser type.
         #
         def type=(new_type)
-          Parser.http_parser_init(self,new_type)
+          self[:type_flags] = ((flags << 2) | TYPES[new_type])
         end
 
         #
