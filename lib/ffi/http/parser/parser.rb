@@ -20,6 +20,8 @@ module FFI
       # @return [Instance]
       #   A new parser instance.
       #
+      # @see Instance
+      #
       def self.new(&block)
         Instance.new(&block)
       end

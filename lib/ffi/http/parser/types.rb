@@ -5,11 +5,13 @@ module FFI
     module Parser
       extend FFI::Library
 
+      # Maximum header size
       HTTP_MAX_HEADER_SIZE = (80 * 1024)
 
       callback :http_data_cb, [:pointer, :pointer, :size_t], :int
       callback :http_cb, [:pointer], :int
 
+      # HTTP Methods
       METHODS = enum :http_method, [
         :DELETE,
         :GET,
@@ -40,6 +42,7 @@ module FFI
         :UNSUBSCRIBE
       ]
 
+      # HTTP Parser types
       TYPES = enum :http_parser_type, [:request, :response, :both]
 
     end
