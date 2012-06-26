@@ -35,37 +35,37 @@ describe Instance do
   end
 
   describe "#type" do
-    it "should default to :request" do
-      subject.type.should == :request
+    it "should default to :both" do
+      subject.type.should == :both
     end
 
     it "should convert the type to a Symbol" do
-      subject[:type_flags] = TYPES[:both]
+      subject[:type_flags] = TYPES[:request]
 
-      subject.type.should == :both
+      subject.type.should == :request
     end
 
     it "should extract the type from the type_flags field" do
-      subject[:type_flags] = ((0xff & ~0x3) | TYPES[:both])
+      subject[:type_flags] = ((0xff & ~0x3) | TYPES[:response])
 
-      subject.type.should == :both
+      subject.type.should == :response
     end
   end
 
   describe "#type=" do
     it "should set the type" do
-      subject.type = :both
+      subject.type = :response
 
-      subject.type.should == :both
+      subject.type.should == :response
     end
 
     it "should not change flags" do
       flags = (0xff & ~0x3)
       subject[:type_flags] = flags
 
-      subject.type = :both
+      subject.type = :request
 
-      subject[:type_flags].should == (flags | TYPES[:both])
+      subject[:type_flags].should == (flags | TYPES[:request])
     end
   end
 
