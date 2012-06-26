@@ -43,12 +43,13 @@ module FFI
         #
         def initialize(ptr=nil)
           if ptr then super(ptr)
-          else        super()
+          else
+            super()
+
+            self.type = :both
           end
 
           @settings = Settings.new
-
-          self.type = :both unless ptr
 
           yield self if block_given?
 
