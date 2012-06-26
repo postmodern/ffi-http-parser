@@ -1,3 +1,10 @@
+### 0.2.0 / 2012-06-25
+
+* Default {FFI::HTTP::Parser::Instance#type} to `:both`, for compatibility
+  with [http-parser-lite].
+* {FFI::HTTP::Parser::Instance#reset!} now accepts a new type argument,
+  for compatibility with [http-parser-lite].
+
 ### 0.1.0 / 2012-06-23
 
 * Initial release:
