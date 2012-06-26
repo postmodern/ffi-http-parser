@@ -7,7 +7,7 @@
 
 ## Description
 
-Ruby FFI bindings to the Joyent's [http-parser][1] library.
+Ruby FFI bindings to the Joyent's [http-parser][1] (1.0) library.
 
 ## Features
 

@@ -1,6 +1,8 @@
 name: ffi-http-parser
-summary: FFI bindings for http-parser
-description: Ruby FFI bindings to the http-parser library.
+summary: FFI bindings for http-parser 1.0
+description:
+  Ruby FFI bindings to the http-parser (1.0) library.
+
 license: MIT
 authors: Postmodern
 email: postmodern.mod3@gmail.com
