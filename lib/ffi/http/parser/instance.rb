@@ -233,8 +233,11 @@ module FFI
         #
         # Resets the parser.
         #
-        def reset!
-          Parser.http_parser_init(self,type)
+        # @param [:request, :response, :both] new_type
+        #   The new type for the parser.
+        #
+        def reset!(new_type=self.type)
+          Parser.http_parser_init(self,new_type)
         end
 
         alias reset reset!
