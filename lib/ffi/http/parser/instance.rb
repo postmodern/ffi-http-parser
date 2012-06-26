@@ -48,6 +48,8 @@ module FFI
 
           @settings = Settings.new
 
+          self.type = :both unless ptr
+
           yield self if block_given?
 
           Parser.http_parser_init(self,type) unless ptr
