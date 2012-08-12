@@ -77,6 +77,18 @@ describe Instance do
     end
   end
 
+  describe "#stop!" do
+    it "should throw :return, 1" do
+      lambda { subject.stop! }.should throw_symbol(:return,1)
+    end
+  end
+
+  describe "#error!" do
+    it "should throw :return, -1" do
+      lambda { subject.error! }.should throw_symbol(:return,-1)
+    end
+  end
+
   describe "callbacks" do
     describe "on_message_begin" do
       include_examples "callback", {:on_message_begin => :on_path}
