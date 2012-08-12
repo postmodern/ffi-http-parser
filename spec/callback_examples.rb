@@ -1,10 +1,10 @@
 shared_examples_for "callback" do |callback_pair|
-  context "when it returns :error" do
+  context "when #error! is called" do
     subject do
       callback, next_callback = callback_pair.to_a.first
 
       described_class.new do |parser|
-        parser.send(callback) { |*args| :error }
+        parser.send(callback) { |*args| parser.error! }
 
         parser.send(next_callback) { @called = true }
       end

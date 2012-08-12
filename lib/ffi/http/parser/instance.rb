@@ -63,7 +63,7 @@ module FFI
         #   The given block will be called when the HTTP message begins.
         #
         def on_message_begin(&block)
-          @settings[:on_message_begin] = wrap_callback(block)
+          @settings[:on_message_begin] = Callback.new(&block)
         end
 
         #
@@ -79,7 +79,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_path(&block)
-          @settings[:on_path] = wrap_data_callback(block)
+          @settings[:on_path] = DataCallback.new(&block)
         end
 
         #
@@ -95,7 +95,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_query_string(&block)
-          @settings[:on_query_string] = wrap_data_callback(block)
+          @settings[:on_query_string] = DataCallback.new(&block)
         end
 
         #
@@ -111,7 +111,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_fragment(&block)
-          @settings[:on_fragment] = wrap_data_callback(block)
+          @settings[:on_fragment] = DataCallback.new(&block)
         end
 
         #
@@ -127,7 +127,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
         #
         def on_url(&block)
-          @settings[:on_url] = wrap_data_callback(block)
+          @settings[:on_url] = DataCallback.new(&block)
         end
 
         #
@@ -143,7 +143,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_header_field(&block)
-          @settings[:on_header_field] = wrap_data_callback(block)
+          @settings[:on_header_field] = DataCallback.new(&block)
         end
 
         #
@@ -159,7 +159,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_header_value(&block)
-          @settings[:on_header_value] = wrap_data_callback(block)
+          @settings[:on_header_value] = DataCallback.new(&block)
         end
 
         #
@@ -169,13 +169,7 @@ module FFI
         #   The given block will be called when the Headers stop.
         #
         def on_headers_complete(&block)
-          @settings[:on_headers_complete] = proc { |parser|
-            case block.call()
-            when :error then -1
-            when :stop  then  1
-            else              0
-            end
-          }
+          @settings[:on_headers_complete] = Callback.new(&block)
         end
 
         #
@@ -192,7 +186,7 @@ module FFI
         # @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.5
         #
         def on_body(&block)
-          @settings[:on_body] = wrap_data_callback(block)
+          @settings[:on_body] = DataCallback.new(&block)
         end
 
         #
@@ -202,7 +196,7 @@ module FFI
         #   The given block will be called when the message completes.
         #
         def on_message_complete(&block)
-          @settings[:on_message_complete] = wrap_callback(block)
+          @settings[:on_message_complete] = Callback.new(&block)
         end
 
         #
@@ -364,38 +358,45 @@ module FFI
           Parser.http_should_keep_alive(self) > 0
         end
 
-        protected
-
         #
-        # Wraps a callback, so if it returns `:error`, `-1` will be returned.
-        # `0` will be returned by default.
+        # Halts the parser.
         #
-        # @param [Proc] callback
-        #   The callback to wrap.
-        #
-        # @return [Proc]
-        #   The wrapped callback.
-        #
-        def wrap_callback(callback)
-          proc { |parser| (callback.call() == :error) ? -1 : 0 }
+        def stop!
+          throw :return, 1
         end
 
         #
-        # Wraps a data callback, so if it returns `:error`, `-1` will be
-        # returned. `0` will be returned by default.
+        # Indicates an error has occurred.
         #
-        # @param [Proc] callback
-        #   The callback to wrap.
-        #
-        # @return [Proc]
-        #   The wrapped callback.
-        #
-        def wrap_data_callback(callback)
-          proc { |parser,buffer,length|
-            data = buffer.get_bytes(0,length)
+        def error!
+          throw :return, -1
+        end
 
-            (callback.call(data) == :error) ? -1 : 0
-          }
+        protected
+
+        class Callback < Proc
+
+          #
+          # Creates a new Parser callback.
+          #
+          def self.new(&block)
+            super do |parser|
+              catch(:return) { yield; 0 }
+            end
+          end
+
+        end
+
+        class DataCallback < Proc
+
+          def self.new(&block)
+            super do |parser,buffer,length|
+              data = buffer.get_bytes(0,length)
+
+              catch(:return) { yield(data); 0 }
+            end
+          end
+
         end
 
       end

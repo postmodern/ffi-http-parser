@@ -246,10 +246,10 @@ describe Instance do
         @header_complete.should be_true
       end
 
-      context "when the callback returns :stop" do
+      context "when #stop! is called" do
         subject do
           described_class.new do |parser|
-            parser.on_headers_complete { :stop }
+            parser.on_headers_complete { parser.stop! }
 
             parser.on_body { |data| @body = data }
           end
