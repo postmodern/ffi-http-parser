@@ -361,6 +361,8 @@ module FFI
         #
         # Halts the parser.
         #
+        # @since 0.3.0
+        #
         def stop!
           throw :return, 1
         end
@@ -368,12 +370,17 @@ module FFI
         #
         # Indicates an error has occurred.
         #
+        # @since 0.3.0
+        #
         def error!
           throw :return, -1
         end
 
         protected
 
+        #
+        # @since 0.3.0
+        #
         class Callback < Proc
 
           #
@@ -387,6 +394,9 @@ module FFI
 
         end
 
+        #
+        # @since 0.3.0
+        #
         class DataCallback < Proc
 
           def self.new(&block)
