@@ -56,6 +56,20 @@ Ruby FFI bindings to the Joyent's [http-parser][1] (1.0) library.
 
     $ gem install ffi-http-parser
 
+### libhttp-parser
+
+* Debian / Ubuntu:
+
+      $ sudo apt install libhttp-parser-dev
+
+* RedHat / Fedora:
+
+      $ sudo dnf install libhttp-parser-devel
+
+* macOS:
+
+      $ brew install http-parser
+
 ## Copyright
 
 Copyright (c) 2012 Hal Brodigan
