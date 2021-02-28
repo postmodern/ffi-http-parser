@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'ffi/http/parser/instance'
 
-describe Instance::DataCallback do
-  let(:parser) { Instance.new }
+describe FFI::HTTP::Parser::Instance::DataCallback do
+  let(:parser) { FFI::HTTP::Parser::Instance.new }
   let(:data)   { 'GET /' }
   let(:length) { data.length }
 

@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'ffi/http/parser/instance'
 
-describe Instance::Callback do
-  let(:parser) { Instance.new }
+describe FFI::HTTP::Parser::Instance::Callback do
+  let(:parser) { FFI::HTTP::Parser::Instance.new }
 
   describe "yielded arguments" do
     subject do

@@ -3,7 +3,7 @@ require 'callback_examples'
 
 require 'ffi/http/parser/instance'
 
-describe Instance do
+describe FFI::HTTP::Parser::Instance do
   describe "#initialize" do
     context "when initialized from a pointer" do
       it "should not call http_parser_init" do
