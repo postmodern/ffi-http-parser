@@ -64,7 +64,7 @@ Ruby FFI bindings to the Joyent's [http-parser][1] (1.0) library.
 
 * RedHat / Fedora:
 
-      $ sudo dnf install libhttp-parser-devel
+      $ sudo dnf install http-parser-devel
 
 * macOS:
 
