@@ -9,7 +9,7 @@ describe Instance do
       it "should not call http_parser_init" do
         ptr = described_class.new.to_ptr
 
-        FFI::HTTP::Parser.should_not_receive(:http_parser_init)
+        expect(FFI::HTTP::Parser).not_to receive(:http_parser_init)
 
         described_class.new(ptr)
       end
@@ -21,7 +21,7 @@ describe Instance do
 
         described_class.new { |parser| expected = parser }
 
-        expected.should be_kind_of(described_class)
+        expect(expected).to be_kind_of(described_class)
       end
 
       it "should allow changing the parser type" do
@@ -29,26 +29,26 @@ describe Instance do
           parser.type = :both
         end
 
-        parser.type.should == :both
+        expect(parser.type).to eq(:both)
       end
     end
   end
 
   describe "#type" do
     it "should default to :both" do
-      subject.type.should == :both
+      expect(subject.type).to eq(:both)
     end
 
     it "should convert the type to a Symbol" do
       subject[:type_flags] = TYPES[:request]
 
-      subject.type.should == :request
+      expect(subject.type).to eq(:request)
     end
 
     it "should extract the type from the type_flags field" do
       subject[:type_flags] = ((0xff & ~0x3) | TYPES[:response])
 
-      subject.type.should == :response
+      expect(subject.type).to eq(:response)
     end
   end
 
@@ -56,7 +56,7 @@ describe Instance do
     it "should set the type" do
       subject.type = :response
 
-      subject.type.should == :response
+      expect(subject.type).to eq(:response)
     end
 
     it "should not change flags" do
@@ -65,13 +65,13 @@ describe Instance do
 
       subject.type = :request
 
-      subject[:type_flags].should == (flags | TYPES[:request])
+      expect(subject[:type_flags]).to eq(flags | TYPES[:request])
     end
   end
 
   describe "#<<" do
     it "should call http_parser_execute" do
-      FFI::HTTP::Parser.should_receive(:http_parser_execute)
+      expect(FFI::HTTP::Parser).to receive(:http_parser_execute)
 
       subject << "GET / HTTP/1.1\r\n"
     end
@@ -79,13 +79,13 @@ describe Instance do
 
   describe "#stop!" do
     it "should throw :return, 1" do
-      lambda { subject.stop! }.should throw_symbol(:return,1)
+      expect { subject.stop! }.to throw_symbol(:return,1)
     end
   end
 
   describe "#error!" do
     it "should throw :return, -1" do
-      lambda { subject.error! }.should throw_symbol(:return,-1)
+      expect { subject.error! }.to throw_symbol(:return,-1)
     end
   end
 
@@ -102,7 +102,7 @@ describe Instance do
       it "should trigger on a new request" do
         subject << "GET / HTTP/1.1"
 
-        @begun.should be_true
+        expect(@begun).to be_true
       end
     end
 
@@ -120,11 +120,11 @@ describe Instance do
       it "should pass the recognized path" do
         subject << "GET "
 
-        @path.should be_nil
+        expect(@path).to be_nil
 
         subject << "#{expected} HTTP/1.1"
 
-        @path.should == expected
+        expect(@path).to eq(expected)
       end
     end
 
@@ -142,11 +142,11 @@ describe Instance do
       it "should pass the recognized query_string" do
         subject << "GET /foo"
 
-        @query_string.should be_nil
+        expect(@query_string).to be_nil
 
         subject << "?#{expected} HTTP/1.1"
 
-        @query_string.should == expected
+        expect(@query_string).to eq(expected)
       end
     end
 
@@ -164,11 +164,11 @@ describe Instance do
       it "should pass the recognized fragment" do
         subject << "GET /foo"
 
-        @fragment.should be_nil
+        expect(@fragment).to be_nil
 
         subject << "##{expected} HTTP/1.1"
 
-        @fragment.should == expected
+        expect(@fragment).to eq(expected)
       end
     end
 
@@ -186,11 +186,11 @@ describe Instance do
       it "should pass the recognized url" do
         subject << "GET "
 
-        @url.should be_nil
+        expect(@url).to be_nil
 
         subject << "#{expected} HTTP/1.1"
 
-        @url.should == expected
+        expect(@url).to eq(expected)
       end
     end
 
@@ -208,11 +208,11 @@ describe Instance do
       it "should pass the recognized header-name" do
         subject << "GET /foo HTTP/1.1\r\n"
 
-        @header_field.should be_nil
+        expect(@header_field).to be_nil
 
         subject << "#{expected}: example.com\r\n"
 
-        @header_field.should == expected
+        expect(@header_field).to eq(expected)
       end
     end
 
@@ -230,11 +230,11 @@ describe Instance do
       it "should pass the recognized header-value" do
         subject << "GET /foo HTTP/1.1\r\n"
 
-        @header_value.should be_nil
+        expect(@header_value).to be_nil
 
         subject << "Host: #{expected}\r\n"
 
-        @header_value.should == expected
+        expect(@header_value).to eq(expected)
       end
     end
 
@@ -251,11 +251,11 @@ describe Instance do
         subject << "GET / HTTP/1.1\r\n"
         subject << "Host: example.com\r\n"
 
-        @header_complete.should be_nil
+        expect(@header_complete).to be_nil
 
         subject << "\r\n"
 
-        @header_complete.should be_true
+        expect(@header_complete).to be_true
       end
 
       context "when #stop! is called" do
@@ -273,7 +273,7 @@ describe Instance do
           subject << "\r\n"
           subject << "Body"
 
-          @body.should be_nil
+          expect(@body).to be_nil
         end
       end
     end
@@ -294,12 +294,12 @@ describe Instance do
         subject << "Transfer-Encoding: chunked\r\n"
         subject << "\r\n"
 
-        @body.should be_nil
+        expect(@body).to be_nil
 
         subject << "#{"%x" % expected.length}\r\n"
         subject << expected
 
-        @body.should == expected
+        expect(@body).to eq(expected)
       end
     end
 
@@ -313,11 +313,11 @@ describe Instance do
       it "should trigger at the end of the message" do
         subject << "GET / HTTP/1.1\r\n"
 
-        @message_complete.should be_nil
+        expect(@message_complete).to be_nil
 
         subject << "Host: example.com\r\n\r\n"
 
-        @message_complete.should be_true
+        expect(@message_complete).to be_true
       end
     end
   end
@@ -326,7 +326,7 @@ describe Instance do
     it "should call http_parser_init" do
       parser = described_class.new
 
-      FFI::HTTP::Parser.should_receive(:http_parser_init)
+      expect(FFI::HTTP::Parser).to receive(:http_parser_init)
 
       parser.reset!
     end
@@ -338,7 +338,7 @@ describe Instance do
 
       parser.reset!
 
-      parser.type.should == :both
+      expect(parser.type).to eq(:both)
     end
   end
 
@@ -348,7 +348,7 @@ describe Instance do
     it "should set the http_method field" do
       subject << "#{expected} / HTTP/1.1\r\n"
 
-      subject.http_method.should == expected
+      expect(subject.http_method).to eq(expected)
     end
   end
 
@@ -359,7 +359,7 @@ describe Instance do
       it "should set the http_major field" do
         subject << "GET / HTTP/#{expected}."
 
-        subject.http_major.should == expected
+        expect(subject.http_major).to eq(expected)
       end
     end
 
@@ -373,7 +373,7 @@ describe Instance do
       it "should set the http_major field" do
         subject << "HTTP/#{expected}."
 
-        subject.http_major.should == expected
+        expect(subject.http_major).to eq(expected)
       end
     end
   end
@@ -385,7 +385,7 @@ describe Instance do
       it "should set the http_minor field" do
         subject << "GET / HTTP/1.#{expected}\r\n"
 
-        subject.http_minor.should == expected
+        expect(subject.http_minor).to eq(expected)
       end
     end
 
@@ -399,7 +399,7 @@ describe Instance do
       it "should set the http_major field" do
         subject << "HTTP/1.#{expected} "
 
-        subject.http_minor.should == expected
+        expect(subject.http_minor).to eq(expected)
       end
     end
   end
@@ -412,7 +412,7 @@ describe Instance do
     end
 
     it "should combine #http_major and #http_minor" do
-      subject.http_version.should == expected
+      expect(subject.http_version).to eq(expected)
     end
   end
 
@@ -425,7 +425,7 @@ describe Instance do
       end
 
       it "should not be set" do
-        subject.http_status.should be_zero
+        expect(subject.http_status).to be_zero
       end
     end
 
@@ -445,7 +445,7 @@ describe Instance do
       end
 
       it "should set the http_status field" do
-        subject.http_status.should == expected
+        expect(subject.http_status).to eq(expected)
       end
     end
   end
@@ -464,7 +464,7 @@ describe Instance do
     end
 
     it "should return true if the Upgrade header was set" do
-      subject.upgrade?.should be_true
+      expect(subject.upgrade?).to be_true
     end
   end
 end

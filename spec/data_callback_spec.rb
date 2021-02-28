@@ -20,7 +20,7 @@ describe Instance::DataCallback do
     before { subject.call(parser,buffer,length) }
 
     it "should yield the data" do
-      @yielded_data.should == data
+      expect(@yielded_data).to eq(data)
     end
   end
 
@@ -30,7 +30,7 @@ describe Instance::DataCallback do
     end
 
     it "should catch :return" do
-      subject.call(parser,buffer,length).should == -1
+      expect(subject.call(parser,buffer,length)).to eq(-1)
     end
   end
 
@@ -38,7 +38,7 @@ describe Instance::DataCallback do
     subject { described_class.new { |data| :do_stuff } }
 
     it "should return 0 by default" do
-      subject.call(parser,buffer,length).should == 0
+      expect(subject.call(parser,buffer,length)).to eq(0)
     end
   end
 end

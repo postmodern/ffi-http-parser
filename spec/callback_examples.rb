@@ -20,7 +20,7 @@ shared_examples_for "callback" do |callback_pair|
 
       subject << "0\r\n"
 
-      @called.should_not be_true
+      expect(@called).not_to be_true
     end
   end
 end

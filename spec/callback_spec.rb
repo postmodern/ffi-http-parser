@@ -12,7 +12,7 @@ describe Instance::Callback do
     before { subject.call(parser) }
 
     it "should not yield the parser" do
-      @yielded_arguments.should be_empty
+      expect(@yielded_arguments).to be_empty
     end
   end
 
@@ -22,7 +22,7 @@ describe Instance::Callback do
     end
 
     it "should catch :return" do
-      subject.call(parser).should == -1
+      expect(subject.call(parser)).to eq(-1)
     end
   end
 
@@ -30,7 +30,7 @@ describe Instance::Callback do
     subject { described_class.new { :do_stuff } }
 
     it "should return 0 by default" do
-      subject.call(parser).should == 0
+      expect(subject.call(parser)).to eq(0)
     end
   end
 end
